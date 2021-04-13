@@ -5,3 +5,7 @@
 /AudioControl/.vs/AudioControl/v16
 /AudioControl/AudioControlLibrary/obj
 /AudioControl/AudioControl_V2/obj
+
+/AudioControl/AudioControlLibrary/bin/Debug
+/AudioControl/Debug
+/AudioControl/MFCApplication_AudioTest/Debug
