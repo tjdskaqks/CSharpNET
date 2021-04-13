@@ -36,10 +36,10 @@ namespace AudioControl_V2
             this.cbb_MicrophoneList = new System.Windows.Forms.ComboBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
-            this.userControl21 = new WpfControlLibrary1.UserControl2();
+            
             this.uc_AudioControl1 = new AudioControlLibrary.uc_AudioControl();
             this.elementHost2 = new System.Windows.Forms.Integration.ElementHost();
-            this.userControl31 = new WpfControlLibrary1.UserControl3();
+            
             ((System.ComponentModel.ISupportInitialize)(this.pb_ForegroundImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_BackgroudImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pb_Microphone)).BeginInit();
@@ -105,16 +105,7 @@ namespace AudioControl_V2
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBox1.Size = new System.Drawing.Size(1361, 689);
             this.textBox1.TabIndex = 10;
-            // 
-            // elementHost1
-            // 
-            this.elementHost1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.elementHost1.Location = new System.Drawing.Point(54, 92);
-            this.elementHost1.Name = "elementHost1";
-            this.elementHost1.Size = new System.Drawing.Size(179, 32);
-            this.elementHost1.TabIndex = 11;
-            this.elementHost1.Text = "elementHost1";
-            this.elementHost1.Child = this.userControl21;
+            
             // 
             // uc_AudioControl1
             // 
@@ -122,15 +113,7 @@ namespace AudioControl_V2
             this.uc_AudioControl1.Name = "uc_AudioControl1";
             this.uc_AudioControl1.Size = new System.Drawing.Size(414, 116);
             this.uc_AudioControl1.TabIndex = 13;
-            // 
-            // elementHost2
-            // 
-            this.elementHost2.Location = new System.Drawing.Point(54, 131);
-            this.elementHost2.Name = "elementHost2";
-            this.elementHost2.Size = new System.Drawing.Size(253, 52);
-            this.elementHost2.TabIndex = 12;
-            this.elementHost2.Text = "elementHost2";
-            this.elementHost2.Child = this.userControl31;
+            
             // 
             // Form1
             // 
@@ -167,10 +150,10 @@ namespace AudioControl_V2
         private System.Windows.Forms.ComboBox cbb_MicrophoneList;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Integration.ElementHost elementHost1;
-        private WpfControlLibrary1.UserControl2 userControl21;
+        
         private AudioControlLibrary.uc_AudioControl uc_AudioControl1;
         private System.Windows.Forms.Integration.ElementHost elementHost2;
-        private WpfControlLibrary1.UserControl3 userControl31;
+        
     }
 }
 

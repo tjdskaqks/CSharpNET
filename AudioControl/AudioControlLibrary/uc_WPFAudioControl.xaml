@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AudioControlLibrary"
-             mc:Ignorable="d" Height="46" Width="206">
+             mc:Ignorable="d" Height="46" Width="235">
     <UserControl.Resources>
         <Style x:Key="SliderRepeatButtonStyleKey" TargetType="{x:Type RepeatButton}">
             <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -91,5 +91,6 @@
         <Button x:Name="btn_StateMicrophone" Content="" HorizontalAlignment="Left" Margin="4,28,0,0" VerticalAlignment="Top" Width="20" Background="#FF4FED82" Height="15"/>
         <Slider x:Name="sd_value" Margin="26,28,0,0" Maximum="100" TickFrequency="10" HorizontalAlignment="Left" Width="95" SmallChange="1" Value="-1"/>
         <ProgressBar x:Name="pb_MicrophoneValue" Style="{DynamicResource NetworkProgressBarStyleKey}" VerticalAlignment="Top" IsIndeterminate="False" Value="50" Margin="126,28,0,0" Height="15" HorizontalAlignment="Left" Width="78" Background="#55050000" />
+        <Button x:Name="btn_OpenSoundControl" Content="소리" Margin="207,3,0,4" HorizontalAlignment="Left" Width="26"/>
     </Grid>
 </UserControl>

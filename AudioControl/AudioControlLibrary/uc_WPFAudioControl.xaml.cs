@@ -49,13 +49,6 @@ namespace AudioControlLibrary
         private static double audioValueLast = 0;
         private static int RATE = 44100;
         private static int BUFFER_SAMPLES = 1024;
-
-        //private int progressbarValue = 0; // Winform UserControl에서 컨트롤할 프로그래스바 값
-        //private Slider slider = null;
-
-        //public int ProgressbarValue { get => progressbarValue; set => ChangeProgressBarValue(value); } // Winform UserControl에서 컨트롤할 프로그래스바 값 프로퍼티
-        //public Slider Slider { get => slider; set => slider = value; } // Winform UserControl에서 컨트롤할 슬라이더 프로퍼티
-
         public uc_WPFAudioControl()
         {
             InitializeComponent();
@@ -65,7 +58,13 @@ namespace AudioControlLibrary
             cbb_MicrophoneList.SelectionChanged += Cbb_MicrophoneList_SelectionChanged;
             sd_value.ValueChanged += Sd_value_ValueChanged;
             btn_StateMicrophone.Click += Btn_StateMicrophone_Click;
-            
+            btn_OpenSoundControl.Click += Btn_OpenSoundControl_Click;
+        }
+
+        private void Btn_OpenSoundControl_Click(object sender, RoutedEventArgs e)
+        {
+            // 제어판 - 소리 - 녹음 열기 (마지막 0은 재생탭, 1은 녹음탭)            
+            System.Diagnostics.Process.Start("rundll32.exe", "Shell32.dll,Control_RunDLL Mmsys.cpl,,1");
         }
 
         private void Uc_WPFAudioControl_Loaded(object sender, RoutedEventArgs e)
@@ -79,6 +78,8 @@ namespace AudioControlLibrary
             sd_value.Value = 0;
 
             pb_MicrophoneValue.Value = 0;
+
+            btn_OpenSoundControl.Cursor = Cursors.Hand;
 
             actionVolumeChange = OnVolumeChanged; // 볼륨 변경
             actionMuteChange = OnMuteChanged; // 음소거 변경

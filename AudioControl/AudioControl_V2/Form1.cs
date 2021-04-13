@@ -18,7 +18,7 @@ using Microsoft.Win32;
 
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
-using WpfControlLibrary1;
+
 
 namespace AudioControl_V2
 {
@@ -53,8 +53,8 @@ namespace AudioControl_V2
             tb_VoluneControl.Scroll += tb_VoluneControl_Scroll;
             pb_Microphone.Click += pb_Microphone_Click;
 
-            userControl31.Value = 0;
-            userControl21.Slider.ValueChanged += Slider_ValueChanged;
+            //userControl31.Value = 0;
+            //userControl21.Slider.ValueChanged += Slider_ValueChanged;
         }
 
         private void Slider_ValueChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<double> e)
@@ -165,7 +165,7 @@ namespace AudioControl_V2
                         if ((int)defaultMicDeivce.Volume > -1)
                         {
                             this.InvokeOnUiThreadIfRequired(() => tb_VoluneControl.Value = (int)defaultMicDeivce.Volume);
-                            this.InvokeOnUiThreadIfRequired(() => userControl21.Slider.Value = (int)defaultMicDeivce.Volume);
+                            //this.InvokeOnUiThreadIfRequired(() => userControl21.Slider.Value = (int)defaultMicDeivce.Volume);
                             
                         }
 
@@ -219,7 +219,7 @@ namespace AudioControl_V2
 
             double frac = audioValueLast / audioValueMax;
             this.InvokeOnUiThreadIfRequired(() => pb_ForegroundImage.Width = (int)(frac * pb_BackgroudImage.Width));
-            this.InvokeOnUiThreadIfRequired(() => userControl31.Value = (int)(frac * pb_BackgroudImage.Width));
+            //this.InvokeOnUiThreadIfRequired(() => userControl31.Value = (int)(frac * pb_BackgroudImage.Width));
         }
 
         // 콤보박스 아이템 변경시 기본 장치 변경
@@ -244,7 +244,7 @@ namespace AudioControl_V2
             if (deviceVolumeChangedArgs.Device.FullName.Equals(defaultMicDeivce.FullName))
             {
                 this.InvokeOnUiThreadIfRequired(() => tb_VoluneControl.Value = (int)deviceVolumeChangedArgs.Volume);
-                this.InvokeOnUiThreadIfRequired(() => userControl21.Slider.Value = (int)deviceVolumeChangedArgs.Volume);
+                //this.InvokeOnUiThreadIfRequired(() => userControl21.Slider.Value = (int)deviceVolumeChangedArgs.Volume);
             }
         }
 
