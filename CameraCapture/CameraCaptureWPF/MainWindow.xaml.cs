@@ -1,42 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Management;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
-using System.Windows.Controls;
-
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
+using DirectShowLib;
 using OpenCvSharp;
 using OpenCvSharp.WpfExtensions;
-using DirectShowLib;
-using OpenCvSharp.Flann;
-using System.Windows.Media;
-using System.Diagnostics;
 
 namespace CameraCaptureWPF
 {
     /// <summary>
     /// MainWindow.xaml에 대한 상호 작용 논리
+    /// 
     /// </summary>
     public partial class MainWindow : System.Windows.Window
     {
-        // 캠 캡쳐
-        private VideoCapture videoCapture = null;
-        // 디스패쳐 타이머
-        private DispatcherTimer _dispatcherTimer = null;
-        // 캠 리스트
-        public List<DsDevice> cameraDevices = null;
-        // 옵션 폼
-        private WindowOption windowOption = null;
-
-        // 옵션 폼에서 설정시 변경에 필요한 변수
-        private int selectDeviceIndex = -1;
-        public int SelectDeviceIndex { get => selectDeviceIndex; set => SetUi2(value); }
+        private VideoCapture _videoCapture = null; // 캠 캡쳐
+        private DispatcherTimer _dispatcherTimer = null; // 디스패쳐 타이머
+        public List<DsDevice> cameraDevices = null; // 캠 리스트
+        
+        private WindowOption windowOption = null; // 옵션 서브 폼
+        
+        private int selectDeviceIndex = -1; // 옵션 폼에서 설정시 변경에 필요한 변수
+        public int SelectDeviceIndex { get => selectDeviceIndex; set => SetMainUI(value); } // 옵션 폼에서 카메라 인덱스가 변경하면 SetUI에서 초기화
 
         public MainWindow()
         {
@@ -50,7 +38,7 @@ namespace CameraCaptureWPF
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             this.Topmost = true; // 기본 탑
-            btn_OpenOption.Cursor = Cursors.Hand;
+            btn_OpenOption.Cursor = Cursors.Hand; 
 
             cameraDevices = new List<DsDevice>();
 
@@ -59,7 +47,7 @@ namespace CameraCaptureWPF
             if (cameraDevices.Count > 0)
             {
                 InitSetting();
-                SetUi2();
+                SetMainUI();
             }
             else
             {
@@ -71,17 +59,18 @@ namespace CameraCaptureWPF
         {
             TimerStop(ref _dispatcherTimer);
 
-            if (videoCapture != null)
+            if (_videoCapture != null)
             {
-                if (videoCapture.IsOpened())
-                    videoCapture.Release();
+                if (_videoCapture.IsOpened())
+                    _videoCapture.Release();
 
-                videoCapture.Dispose();
+                _videoCapture.Dispose();
             }
 
             if (windowOption != null)
                 windowOption.Close();
         }
+
         private void Btn_OpenOption_Click(object sender, RoutedEventArgs e)
         {
             if (windowOption == null) // null 일때만 옵션 창 오픈
@@ -111,11 +100,11 @@ namespace CameraCaptureWPF
         // 타이머 동작
         private void _dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            if (videoCapture != null)
+            if (_videoCapture != null)
             {
-                using (Mat mat = new Mat())
+                using (Mat mat = new Mat()) // 캠 캡쳐 후 이미지 소스 지정
                 {
-                    if (videoCapture.Read(mat))
+                    if (_videoCapture.Read(mat))
                     {
                         var wb = WriteableBitmapConverter.ToWriteableBitmap(mat, 1024, 1024, PixelFormats.Bgr24, null);
                         img_Camera.Source = wb;
@@ -124,13 +113,13 @@ namespace CameraCaptureWPF
             }
         }
 
-        // 카메라 리스트 가져오기
+        // 카메라 리스트 가져오기 LINQ
         private void GetCameraList() => cameraDevices.AddRange(from DsDevice dsDevice in DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice)
                                                                where !dsDevice.DevicePath.Contains("device:sw")
                                                                select dsDevice);
 
-        // ui 설정
-        private void SetUi2(int index = 0)
+        // MainUI 설정
+        private void SetMainUI(int index = 0)
         {
             TimerStop(ref _dispatcherTimer);
 
@@ -138,11 +127,12 @@ namespace CameraCaptureWPF
             {
                 selectDeviceIndex = index;
 
-                if (videoCapture != null &&videoCapture.IsOpened())
-                    videoCapture.Release();
+                if (_videoCapture != null && _videoCapture.IsOpened())
+                    _videoCapture.Release();
 
-                videoCapture = VideoCapture.FromCamera(index, VideoCaptureAPIs.ANY);
-                if (videoCapture.Open(index, VideoCaptureAPIs.ANY))
+                _videoCapture = VideoCapture.FromCamera(index, VideoCaptureAPIs.ANY);
+
+                if (_videoCapture.Open(index, VideoCaptureAPIs.ANY))
                     this.Title = $"Camera - {cameraDevices[index].Name}";
                 else
                     this.Title = $"Camera - 연결에 실패했습니다.";
