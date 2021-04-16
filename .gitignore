@@ -9,3 +9,8 @@
 /AudioControl/AudioControlLibrary/bin/Debug
 /AudioControl/Debug
 /AudioControl/MFCApplication_AudioTest/Debug
+/CameraCapture/.vs/CameraCapture/v16
+/CameraCapture/CameraCaptureWPF/bin/Release
+/CameraCapture/CameraCaptureWPF/obj/Debug
+/CameraCapture/CameraCaptureWPF/obj/Release
+/CameraCapture/packages
