@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using DirectShowLib;
-using OpenCvSharp;
 
 namespace CameraCaptureWPF
 {
@@ -21,12 +11,13 @@ namespace CameraCaptureWPF
     /// </summary>
     public partial class WindowOption : System.Windows.Window
     {
-        List<DsDevice> cameraDevices = null;
+        List<DsDevice> cameraDevices = null; // 메인 폼에서 받아올 리스트
         MainWindow _mainWindow = null;
 
         public WindowOption(MainWindow mainWindow)
         {
             InitializeComponent();
+
             this._mainWindow = mainWindow;
             this.Loaded += WindowOption_Loaded;
             chkb_IsStayOnTop.Click += (s, e) => { this.Topmost = (bool)chkb_IsStayOnTop.IsChecked; _mainWindow.Topmost = (bool)chkb_IsStayOnTop.IsChecked; }; // 체크박스 이벤트
@@ -43,8 +34,7 @@ namespace CameraCaptureWPF
 
             cameraDevices = _mainWindow.cameraDevices; // 부모폼에 있는 카메라 리스트를 가져오기(폼이 열릴 때마다 오픈하면 메인폼과 옵션폼의 카메라 리스트가 달라질 수 있음)
 
-            //GetCameraList();
-            SetUi();
+            SetOptionUI();
         }
 
         private void Cbb_ListCamera_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -53,13 +43,8 @@ namespace CameraCaptureWPF
                 _mainWindow.SelectDeviceIndex = cbb_ListCamera.SelectedIndex; // 부모 폼에서 카메라 디바이스 선택해 변경하기 위해
         }
 
-        // 카메라 리스트 가져오기
-        private void GetCameraList() => cameraDevices.AddRange(from DsDevice dsDevice in DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice)
-                                                               where !dsDevice.DevicePath.Contains("device:sw")
-                                                               select dsDevice);
-
-        // ui 설정
-        private void SetUi(int index = 0)
+        // 옵션 폼 UI 설정
+        private void SetOptionUI(int index = 0)
         {
             if (cameraDevices.Count > 0 && index >= 0)
             {
