@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CameraCaptureWPF"
         mc:Ignorable="d"
-        Title="Dunamu Camera" Height="315" Width="292" ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
+        Title="FWCap" Height="304" Width="364" ResizeMode="CanResize" WindowStartupLocation="CenterScreen" Background="#FF2A2C34">
     <Grid>
-        <Image x:Name="img_Camera" Margin="8,9,8,63" Stretch="Fill">
+        <Image x:Name="img_Camera" Margin="8,9,8,33" Stretch="Fill">
             <Image.OpacityMask>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black"/>
@@ -15,7 +15,7 @@
                 </LinearGradientBrush>
             </Image.OpacityMask>
         </Image>
-        <Button x:Name="btn_OpenOption" Content="옵션" Margin="0,0,8,26" Background="#FFFAFAFA" RenderTransformOrigin="0.521,-0.053" HorizontalAlignment="Right" Width="72" Height="22" VerticalAlignment="Bottom"/>
+        <Button x:Name="btn_OpenOption" Content="설정" Margin="0,0,8,6" Background="#FFFAFAFA" RenderTransformOrigin="0.521,-0.053" HorizontalAlignment="Right" Width="51" Height="22" VerticalAlignment="Bottom"/>
 
     </Grid>
 </Window>

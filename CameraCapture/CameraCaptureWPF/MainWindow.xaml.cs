@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -8,6 +9,7 @@ using System.Windows.Threading;
 using DirectShowLib;
 using OpenCvSharp;
 using OpenCvSharp.WpfExtensions;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CameraCaptureWPF
 {
@@ -30,29 +32,26 @@ namespace CameraCaptureWPF
         {
             InitializeComponent();
 
-            this.Loaded += MainWindow_Loaded;
-            this.Closed += MainWindow_Closed;
-            btn_OpenOption.Click += Btn_OpenOption_Click;
-        }
-
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            this.Topmost = true; // 메인 폼 기본으로 항상 탑
-            btn_OpenOption.Cursor = Cursors.Hand; 
-
+            // MainWindow_Loaded로 옮기지 않은 이유는 폼이 로드되고 또 ui를 설정하기에 느려 보이는 효과 때문. 
             _CameraDevices = new List<DsDevice>();
-
             GetCameraList();
-
             if (_CameraDevices.Count > 0)
             {
                 InitSetting();
                 SetMainUI();
             }
             else
-            {
                 MessageBox.Show("등록된 카메라가 없습니다.", "주의", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+
+            this.Loaded += MainWindow_Loaded;
+            this.Closed += MainWindow_Closed;
+            btn_OpenOption.Click += Btn_OpenOption_Click;
+        }   
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Topmost = true; // 메인 폼 기본으로 항상 탑
+            btn_OpenOption.Cursor = Cursors.Hand;
         }
 
         private void MainWindow_Closed(object sender, EventArgs e)
@@ -75,16 +74,17 @@ namespace CameraCaptureWPF
         {
             if (_OptionWindow == null) // null 일때만 옵션 창 오픈
             {
-                _OptionWindow = new OptionWindow(this);
-                _OptionWindow.Left = this.Left + this.Width;
-                _OptionWindow.Top = this.Top;
+                var ms = this;
+                _OptionWindow = new OptionWindow(ref ms);
+                _OptionWindow.Top = this.Top + (this.ActualHeight - _OptionWindow.Height) / 2;
+                _OptionWindow.Left = this.Left + (this.ActualWidth - _OptionWindow.Width) / 2;
                 _OptionWindow.Closed += (s, args) => _OptionWindow = null; // 닫히면 null로 초기화
                 _OptionWindow.Show();
             }
             else
             {
-                _OptionWindow.Left = this.Left + this.Width;
-                _OptionWindow.Top = this.Top;
+                _OptionWindow.Top = this.Top + (this.ActualHeight - _OptionWindow.Height) / 2;
+                _OptionWindow.Left = this.Left + (this.ActualWidth - _OptionWindow.Width) / 2;
                 _OptionWindow.Activate();
             }
         }
@@ -129,13 +129,18 @@ namespace CameraCaptureWPF
 
                 if (_videoCapture != null && _videoCapture.IsOpened())
                     _videoCapture.Release();
-
-                _videoCapture = VideoCapture.FromCamera(index, VideoCaptureAPIs.ANY);
-
-                if (_videoCapture.Open(index, VideoCaptureAPIs.ANY))
-                    this.Title = $"Camera - {_CameraDevices[index].Name}";
+                
+                if (_videoCapture == null)
+                    _videoCapture = new VideoCapture(index);
                 else
-                    this.Title = $"Camera - 연결에 실패했습니다.";
+                    if (!_videoCapture.IsOpened())
+                        _videoCapture.Open(index);
+
+                // FWCap -> 타이틀 바 변경 예정
+                //if (_videoCapture != null && _videoCapture.IsOpened())
+                //    this.Title = $"Futurewiz Camera - {_CameraDevices[index].Name}";
+                //else
+                //    this.Title = $"Futurewiz Camera - 연결에 실패했습니다.";
             }
             TimerStart(ref _dispatcherTimer);
         }

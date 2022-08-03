@@ -14,11 +14,15 @@ namespace CameraCaptureWPF
         List<DsDevice> _CameraDevices = null; // 메인 폼에서 받아올 리스트
         MainWindow _MainWindow = null;
 
-        public OptionWindow(MainWindow mainWindow)
+        public OptionWindow(ref MainWindow mainWindow)
         {
             InitializeComponent();
 
             this._MainWindow = mainWindow;
+
+            // WindowOption_Loaded로 옮기지 않은 이유는 폼이 로드되고 또 ui를 설정하기에 느려 보이는 효과 때문.
+            _CameraDevices = _MainWindow._CameraDevices; // 부모폼에 있는 카메라 리스트를 가져오기(폼이 열릴 때마다 오픈하면 메인폼과 옵션폼의 카메라 리스트가 달라질 수 있음)
+            SetOptionUI();
 
             this.Loaded += WindowOption_Loaded;
             chkb_IsStayOnTop.Click += (s, e) => { this.Topmost = (bool)chkb_IsStayOnTop.IsChecked; _MainWindow.Topmost = (bool)chkb_IsStayOnTop.IsChecked; }; // 체크박스 이벤트
@@ -32,10 +36,6 @@ namespace CameraCaptureWPF
 
             chkb_IsStayOnTop.IsChecked = _MainWindow.Topmost; // 부모폼의 Topmost 설정 받아오기
             this.Topmost = _MainWindow.Topmost;        // 부모폼의 Topmost 설정 받아오기
-
-            _CameraDevices = _MainWindow._CameraDevices; // 부모폼에 있는 카메라 리스트를 가져오기(폼이 열릴 때마다 오픈하면 메인폼과 옵션폼의 카메라 리스트가 달라질 수 있음)
-
-            SetOptionUI();
         }
 
         private void Cbb_ListCamera_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -50,9 +50,10 @@ namespace CameraCaptureWPF
             if (_CameraDevices.Count > 0 && index >= 0)
             {
                 cbb_ListCamera.Items.Clear();
+                
                 foreach (var cameraDevice in _CameraDevices)
                     cbb_ListCamera.Items.Add(cameraDevice.Name);
-
+                
                 if (_MainWindow.SelectDeviceIndex > -1)
                     cbb_ListCamera.SelectedIndex = _MainWindow.SelectDeviceIndex;
             }
